@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="script.js" defer></script>
+    <title>Bee Chat</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Bee Chat</h1>
+
+      <form @submit.prevent="sendMessage">
+        <input v-model="recipientId" type="text" placeholder="Recipient ID" />
+        <textarea v-model="content" placeholder="Say something"></textarea>
+        <input type="submit" value="Send" />
+      </form>
+
+      <p v-for="reply in chat" :key="reply.id" class="reply">
+        <label class="reply-id">{{ reply.senderId }}</label>
+        <span class="reply-content">{{ reply.content }}</span>
+      </p>
+    </div>
+  </body>
+</html>
