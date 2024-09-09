@@ -26,11 +26,8 @@ createApp({
 
     onMounted(() => {
       ws.onopen = () => console.log('WebSocket connected')
-
       ws.onmessage = receiveMessage
-
       ws.onclose = () => console.log('WebSocket closed')
-
       ws.onerror = err => console.error(err)
     })
 

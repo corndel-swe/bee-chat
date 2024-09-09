@@ -5,7 +5,7 @@
 # BeeChat
 
 Ok, BeeMail 2.0 was a runaway success. Our user numbers are off the charts. And
-our AWS bill is.. well, let's not talk about it. We raised more venture capital
+our AWS bill is... well, let's not talk about it. We raised more venture capital
 though! So we're going to add a new feature: instant messaging. We're calling it
 **BeeChat**.
 
@@ -17,8 +17,9 @@ Our front-end engineers have put together the UI, which you can see in the
 To run the front-end, make sure you have the Live Server extension installed in
 VS Code, then right-click on `index.html` and select _Open with Live Server_.
 
-**Note**: the front-end expects a web-socket server to be running on port
-`5001`.
+> [!NOTE]
+>
+> The front-end expects a WebSocket server to be running on port `5001`.
 
 ## WebSockets
 
@@ -31,8 +32,68 @@ WebSocket server. We're looking to develop this in two stages.
 If a user sends a message without specifying an ID, the message should be sent
 to **every connected client**. This will really bring the community together!
 
+1. When the client sends a message in the format
+
+   ```json
+   {
+     "content": "Hello, world"
+   }
+   ```
+
+   a `recipientId` is not provided.
+
+2. If `recipientId` is not provided, the server should send the `content` to
+   every connected client (including the sender).
+
+3. Make sure to use the Tech Docs guide for your language to help you get the
+   server running:
+
+   - [Javascript](https://tech-docs.corndel.com/express/web-socket-server.html)
+   - [Java]()
+   - [Python]()
+   - [C#]()
+
 ### Stage 2: Targeted messaging
 
-If, however, the user sends a message to a particular ID, then the message
-should only be sent to the recipient. This is a bit trickier to get working, but
-it's something our competitors do so we're gonna have to keep up!
+If you manage to get global messaging working, well done! That is a great
+achievement.
+
+Stage 2 is more challenging, so have fun working on it but don't be discouraged
+if you don't quite get it working. What we'd like is to allow users to send
+messages to particular users by their ID.
+
+1. When a new WebSocket is created on the server, create a new `User` object.
+   Assign the user an ID and save a reference to their socket.
+
+   ```mermaid
+   classDiagram
+    class User {
+        +int id
+        -Socket socket
+        +receiveMessage(Message message)
+    }
+   ```
+
+2. The `receiveMessage` method should send the message to the user by using the
+   user's socket.
+
+3. When a message of the form
+
+   ```json
+   {
+     "recipientId": 3,
+     "content": "Hello, number 3!"
+   }
+   ```
+
+   is sent to the server, the `recipientId` is defined, and so the message
+   should only be sent to the user with ID `3`.
+
+4. For the full chat experience, the message should also be delivered to the
+   sender, so that both sender and recipient can see the chat history.
+
+> [!TIP]
+>
+> To simplify things a little, you could create an `allUsers` list. When a new
+> user connects, just push their socket onto the end of the list. The user "id"
+> is just the index of their socket in the list.
