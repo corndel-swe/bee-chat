@@ -15,6 +15,7 @@ createApp({
         content: content.value
       }
       ws.send(JSON.stringify(message))
+      recipientId.value = ''
       content.value = '' // clear input field
     }
 

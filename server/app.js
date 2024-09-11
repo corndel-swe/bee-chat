@@ -20,16 +20,18 @@ function configureSocket(socket) {
 function sendMessage(message, sender) {
   const { recipientId, content } = JSON.parse(message)
 
-  const recipient = User.find(recipientId)
+  const sendable = JSON.stringify({
+    senderId: sender.id,
+    content
+  })
 
-  if (recipient) {
-    const sendable = JSON.stringify({
-      senderId: sender.id,
-      recipientId,
-      content
-    })
-
+  if (recipientId) {
+    const recipient = User.find(recipientId)
     sender.ws.send(sendable)
     recipient.ws.send(sendable)
+  } else {
+    for (let recipient of User.findAll()) {
+      recipient.ws.send(sendable)
+    }
   }
 }
