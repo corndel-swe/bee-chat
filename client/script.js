@@ -16,7 +16,7 @@ createApp({
       }
       ws.send(JSON.stringify(message))
       recipientId.value = ''
-      content.value = '' // clear input field
+      content.value = ''
     }
 
     function receiveMessage(message) {
@@ -27,11 +27,8 @@ createApp({
 
     onMounted(() => {
       ws.onopen = () => console.log('WebSocket connected')
-
       ws.onmessage = receiveMessage
-
       ws.onclose = () => console.log('WebSocket closed')
-
       ws.onerror = err => console.error(err)
     })
 
